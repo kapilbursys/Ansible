@@ -1,0 +1,14 @@
+---
+- hosts: kapil 
+  gather_facts: disable
+  tasks:
+    - name: copy the package from server to client
+      copy: src=/home/deepak/Desktop/ansible_data/java-6-oracle.zip dest=/usr/lib/jvm/  owner=root group=root mode=0755          
+    - name: Unarchive the package
+      unarchive: src=/usr/lib/jvm/java-6-oracle.zip dest=/usr/lib/jvm/ remote_src=yes
+    - name: Install the java
+      shell: update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/java-6-oracle/bin/java" 1
+    - name: Install JAVAC
+      shell: update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/java-6-oracle/bin/javac" 1  
+    - name: Installl Javaaws
+      shell: update-alternatives --install "/usr/bin/javaws" "javaws" "/usr/lib/jvm/java-6-oracle/bin/javaws" 1
