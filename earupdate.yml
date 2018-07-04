@@ -1,0 +1,37 @@
+---
+- hosts: db
+  gather_facts: no
+  vars:
+    date: "{{ lookup('pipe', 'date +%Y%m%d%H%M') }}"
+    date1: "{{ lookup('pipe', 'date +%Y%m%d') }}"
+    ear_name: ecmsserver.ear
+  tasks:
+   - name: check the Jboss service Status
+     shell: ps -ax | grep jboss
+     register: jboss_status
+   - name: Stop the Jboss service if Running else skip
+     command: service jboss stop
+     when: "'-b 0.0.0.0' in jboss_status.stdout"
+   - name: If new_ear Directory found .Delete it
+     file:  path=/home/bbh/Downloads/new_ear_{{date1}} state=absent
+   - name: Create New directory into Downloads
+     file:  path=/home/bbh/Downloads/new_ear_{{date1}} state=directory  owner=root  group=root  mode=0755
+   - name: Copy the New Ear to Downloads
+     copy: src=/home/deepak/Desktop/ansible_data/{{ear_name}}  dest=/home/bbh/Downloads/new_ear_{{date1}}/ owner=root group=root mode=0644   
+#copying the old ear file
+   - name: Check the file exist 
+     stat: 
+       path: /usr/share/jboss-6.0.0.Final/server/default/deploy/{{ear_name}}
+     register: ear_result
+   - name: rename_file
+     command:  mv /usr/share/jboss-6.0.0.Final/server/default/deploy/{{ear_name}} /usr/share/jboss-6.0.0.Final/server/default/deploy/{{ear_name}}{{date}}
+     when: ear_result.stat.exists == true  
+#Replace ear 
+   - name: Replace ear file
+     command: cp  /home/bbh/Downloads/new_ear_{{date1}}/{{ear_name}} /usr/share/jboss-6.0.0.Final/server/default/deploy/.           
+#start jboss
+   - name: Start the jboss service
+     service: name=jboss state=started
+   - name: Jboss is starting
+     pause: minutes=1
+
