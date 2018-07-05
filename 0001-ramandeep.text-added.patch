@@ -1,0 +1,20 @@
+From fd226fdde1f507936c76926804ea8f72cbcf4bee Mon Sep 17 00:00:00 2001
+From: kapil <kapil@netsort-srv>
+Date: Thu, 5 Jul 2018 10:27:07 +0530
+Subject: [PATCH] ramandeep.text added
+
+---
+ ramandeep.text | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 ramandeep.text
+
+diff --git a/ramandeep.text b/ramandeep.text
+new file mode 100644
+index 0000000..542dc80
+--- /dev/null
++++ b/ramandeep.text
+@@ -0,0 +1 @@
++hello ramana
+-- 
+2.7.4
+
